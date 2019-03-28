@@ -1,0 +1,95 @@
+boolean keys[];
+
+int vaisseau_x = 10;
+int vaisseau_y = 10;
+int vaisseau_width = 50;
+int vaisseau_height = 50;
+int vaisseau_vitesse = 10;
+int vaisseau_munitions = 1000;
+int vaisseau_munitions_restantes = vaisseau_munitions + 1;
+PImage vaisseau_image;
+
+boolean tir_ouvert = false;
+
+int assaillant_width = 30;
+int assaillant_height = 30;
+int assaillant_nombre = 100;
+PImage assaillant_image;
+
+int powerup_width = 20;
+int powerup_height = 20;
+int powerup_nombre = 20;
+PImage powerup_image;
+
+Assaillant[] assaillants = new Assaillant[assaillant_nombre];
+Tir[] tir = new Tir[vaisseau_munitions];
+Vaisseau[] vaisseau = new Vaisseau[1];
+Powerup[] powerup = new Powerup[powerup_nombre];
+void setup(){
+  size(1024,768);
+  frameRate(60);
+  keys = new boolean[3];
+  
+  for(int i = 0; i < assaillants.length; i++) assaillants[i] = new Assaillant(ceil(random(width, width + 20000)), ceil(random(height - assaillant_height)), 2, ceil(random(30, 255)), assaillant_image);
+    for(int i = 0; i < powerup.length; i++) powerup[i] = new Powerup(ceil(random(width, width + 20000)), ceil(random(height - powerup_height)), 5, powerup_image);
+  vaisseau[0] = new Vaisseau(vaisseau_x, vaisseau_y, vaisseau_vitesse, vaisseau_image);
+  
+}
+
+void draw(){
+  background(255);
+  
+  for(int i = 0; i < assaillants.length; i++){
+    assaillants[i].affichage();
+    assaillants[i].deplacement();
+  }
+  
+  if(tir_ouvert){
+    for(int i = 0; i <= vaisseau_munitions - vaisseau_munitions_restantes; i++){
+      tir[i].affichage();
+      tir[i].deplacement();
+    }
+  }
+  for(int i = 0; i < powerup.length; i++){
+    powerup[i].affichage();
+    powerup[i].deplacement();
+  }
+  vaisseau[0].affichage();
+  deplacement();
+  bordures();
+}
+
+void keyPressed(){
+  if(key == 'e' || key == 'E') keys[0] = true;
+  if(key == 'c' || key == 'C') keys[1] = true;  
+  if(key == ' ') keys[2] = true;
+}
+
+void keyReleased(){
+  if(key == 'e' || key == 'E') keys[0] = false;
+  if(key == 'c' || key == 'C') keys[1] = false;
+  if(key == ' ') keys[2] = false;
+}
+
+void deplacement(){
+  if(keys[0] == true) vaisseau[0].pos_y -= vaisseau_vitesse;
+  if(keys[1] == true) vaisseau[0].pos_y += vaisseau_vitesse;
+  if(keys[2] == true) tirer();
+}
+
+void bordures(){
+  if(vaisseau_y < 0) vaisseau_y = 0;
+  if(vaisseau_y + vaisseau_height > height) vaisseau_y = height - vaisseau_height;
+}
+
+void tirer(){
+  tir[vaisseau_munitions - vaisseau_munitions_restantes + 1] = new Tir(vaisseau[0].pos_y, 10);
+  vaisseau_munitions_restantes -= 1;
+  
+  tir_ouvert = true;
+  keys[2] = false;
+}
+
+void collision(){
+  
+}
