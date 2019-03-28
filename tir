@@ -1,0 +1,47 @@
+
+class Tir {
+  int pos_x = vaisseau_x + vaisseau_width;
+  int pos_y;
+  int largeur = 40;
+  int hauteur = 6;
+  float vitesse;
+  boolean existe = false;
+  PImage image;
+  
+  Tir(int init_y, float init_vitesse){
+    this.pos_y = init_y;
+    this.vitesse = init_vitesse;
+    this.existe = true;
+  }
+  
+  void affichage(){
+    if(existe){
+    fill((int) random(0,255), (int) random(0,255), (int) random(0,255));
+    rect(pos_x, pos_y + ((vaisseau_height - hauteur) / 2), largeur, hauteur);
+    }
+  }
+  
+  void deplacement(){
+    this.pos_x += vitesse;
+  }
+  
+  void sortie(){
+    
+  }
+  
+  int getX(){
+    return pos_x;
+  }
+  
+  int getY(){
+    return pos_y;
+  }
+  
+  boolean getExiste(){
+    return existe;
+  }
+  
+  PImage getImage(){
+   return image; 
+  }
+}
